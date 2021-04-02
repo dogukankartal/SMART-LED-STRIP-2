@@ -1,0 +1,98 @@
+const int trigger_pin1 = 4;
+const int echo_pin1 = 3;
+const int trigger_pin2 = 6;
+const int echo_pin2 = 5;
+const int trigger_pin3 =8;
+const int echo_pin3 = 7;
+const int ldr1 = A1;
+const int ldr2 = A2;
+int role=2;
+int sure1;
+int mesafe1;
+int sure2;
+int mesafe2;
+int sure3;
+int mesafe3;
+int isik1;
+int isik2;
+
+void setup() {
+  
+  pinMode(role, OUTPUT);
+  pinMode(ldr1,INPUT);
+  pinMode(ldr2,INPUT);
+  pinMode(trigger_pin1, OUTPUT);
+  pinMode(echo_pin1, INPUT);
+  pinMode(trigger_pin2, OUTPUT);
+  pinMode(echo_pin2, INPUT);
+  pinMode(trigger_pin3, OUTPUT);
+  pinMode(echo_pin3, INPUT);
+  Serial.begin(9600);
+  digitalWrite(role, HIGH);
+}
+
+void loop() {
+ digitalWrite(trigger_pin1, HIGH);       //1.HC-SR04  
+  delayMicroseconds(1000);
+  digitalWrite(trigger_pin1, LOW);
+  sure1 = pulseIn(echo_pin1, HIGH);
+  mesafe1 = (sure1 / 2) / 28.5;
+  digitalWrite(trigger_pin2, HIGH);      //2.HC-SR04
+  delayMicroseconds(1000);
+  digitalWrite(trigger_pin2, LOW);
+  sure2 = pulseIn(echo_pin2, HIGH);
+  mesafe2 = (sure2 / 2) / 28.5;
+  digitalWrite(trigger_pin3, HIGH);      //3.HC-SR04
+  delayMicroseconds(1000);
+  digitalWrite(trigger_pin3, LOW);
+  sure3 = pulseIn(echo_pin3, HIGH);
+  mesafe3 = (sure3 / 2) / 28.5;
+  {
+ isik1 = analogRead(ldr1);
+  Serial.println(isik1);
+  isik2 = analogRead(ldr2);
+  Serial.println(isik2);
+  delay(100);
+   
+   if(isik1>=450)                       //A1
+  {
+    digitalWrite(role,HIGH); 
+  }
+    if(isik1<=250)
+    {
+  if (mesafe2 <= 70)                   // trigger_pin2  echo_pin2 
+  {
+    digitalWrite(role, LOW);
+    delay(20000);
+    digitalWrite(role,HIGH); 
+  }
+    delay(10);
+    }
+  else
+  if(isik2>=450)                       //A2
+  {
+    digitalWrite(role,HIGH); 
+  }
+    if(isik2<=250)
+    {
+    if (mesafe1 <= 125)                //trigger_pin1  echo_pin1
+  {
+    digitalWrite(role, LOW);
+    delay(20000);
+    digitalWrite(role,HIGH); 
+    }
+    delay(10);
+    }
+  else
+  if(isik1>=450)                      //A1
+  {
+    digitalWrite(role,HIGH); 
+  }
+    if(isik1<=250)
+    { 
+    if (mesafe3 <= 70)                    // trigger_pin3  echo_pin3
+  {
+    digitalWrite(role, LOW);
+    delay(20000);
+    digitalWrite(role,HIGH); 
+    }}}}
